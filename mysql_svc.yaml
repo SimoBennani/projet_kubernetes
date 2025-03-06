@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-clusterip
+  labels:
+    app: wordpress
+    tier: myqsl
+spec:
+  selector:
+    app: mysql  # Sélectionne les Pods avec le label "app: mysql"
+  ports:
+    - protocol: TCP
+      port: 3306        # Port d’accès du service
+      targetPort: 3306  # Port sur le conteneur MySQL
+  type: ClusterIP  # Exposition uniquement à l'intérieur du cluster
