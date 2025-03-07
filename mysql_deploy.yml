@@ -9,7 +9,8 @@ spec:
   replicas: 1  # Nombre de pods MySQL
   selector:
     matchLabels:
-      app: mysql
+      app: wordpress
+      tier: mysql
   template:
     metadata:
       labels:
@@ -20,26 +21,26 @@ spec:
         - name: mysql
           image: mysql:8.0  # Version de MySQL
           env:
-        - name: MYSQL_DATABASE
-          value: wordpress
-        - name: MYSQL_USER
-          value: toto
-        - name: MYSQL_PASSWORD
-          valueFrom:
-             secretKeyRef:
+          - name: MYSQL_DATABASE
+            value: wordpress
+          - name: MYSQL_USER
+            value: toto
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
                name: app-wordpress-secret
-               key: mysql_passwor   
-        - name: MYSQL_RANDOM_ROOT_PASSWORD
-          valueFrom:
-            secretKeyRef:
+               key: mysql_password   
+          - name: MYSQL_RANDOM_ROOT_PASSWORD
+            valueFrom:
+             secretKeyRef:
               name: app-wordpress-secret
               key: mysql_random_root_password 
-      ports:
-      - containerPort: 3306
-        name: mysql
-      volumeMounts:
-      - name: mysql-persistent-storage
-        mountPath: /var/lib/mysql
+          ports:
+          - containerPort: 3306
+            name: mysql
+          volumeMounts:
+          - name: mysql-persistent-storage
+            mountPath: /var/lib/mysql
       volumes:
       - name: mysql-persistent-storage
         hostPath:
